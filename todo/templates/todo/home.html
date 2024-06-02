@@ -55,7 +55,7 @@
                     <span class="ms-2"><a href="{% url 'user_profile' task.user.created_by.id %}">{{ task.user.name|title }}</a></span>
                   </th>
                   <td class="align-middle">
-                    <span><a href="{% url 'task_detail' task.id %}">{{ task.title|title }}</a></span>
+                    <span><a href="{% url 'task_detail' task.id %}">{{ task.title|truncatewords:4|title }}</a></span>
                   </td>
                   <td class="align-middle">
                     <span>{{ task.created_at|date:"F j, Y" }}</span> <!-- Updated Date Format -->

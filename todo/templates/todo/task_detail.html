@@ -9,9 +9,17 @@
     <div class="card-body">
       <h2>{{ task.title }}</h2>
       <p>{{ task.description }}</p>
-      <p><strong>Priority:</strong> {{ task.priority }}</p>
+      <p><strong>Priority:</strong> 
+      {% if task.priority == 'Low' %}
+        <span class="badge bg-primary">{{ task.priority }}</span>
+        {% elif task.priority == 'Medium' %}
+        <span class="badge bg-warning">{{ task.priority }}</span>
+        {% elif task.priority == 'High' %}
+        <span class="badge bg-danger">{{ task.priority }}</span>
+      {% endif %}
+      </p>
       <p><strong>Status:</strong> {{ task.status }}</p>
-
+      <p><strong>Due Date:</strong> {{ task.due_date|timeuntil }}</p>
       <hr>
       <p><strong>Participants</strong>: 
         {% for participant in task.participants.all %}
