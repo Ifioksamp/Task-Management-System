@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Profile of {{ profile.name }} {% endblock %}
+
+{% block content %}
+<section class="gradient-custom-2 d-flex justify-content-center align-items-center">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body text-center">
+            {% if profile.profile_picture %}
+            <img src="{{ profile.profile_picture.url }}" style="width: 150px;"/> 
+            {% else %}
+            <img src="https://www.svgrepo.com/show/384676/account-avatar-profile-user-6.svg" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+            {% endif %}
+            <h5 class="my-3">{{ profile.created_by.first_name }} {{ profile.created_by.last_name }}</h5>
+            <p class="text-muted mb-1">{{ profile.created_by.email }}</p>
+            <p class="text-muted mb-4">{{ profile.gender }}</p>
+            {% if request.user == profile.created_by %}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+              Edit Profile
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="mb-3">Tasks of {{ profile.name }}</h5>
+            <ul class="list-group">
+              {% for task in tasks %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span><a href="{% url 'task_detail' task.id %}">{{ task.title }}</a></span>
+                <span class="badge bg-primary rounded-pill">{{ task.status }}</span>
+              </li>
+              {% empty %}
+              <li class="list-group-item">No tasks found.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" id="editProfileForm">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary mt-4">Save changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

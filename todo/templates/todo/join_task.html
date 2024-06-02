@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Join Task {% endblock %}
+
+{% block content %}
+<section class="gradient-custom-2 d-flex justify-content-center align-items-center">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-12 col-xl-10">
+        <div class="card mask-custom">
+          <div class="card-body p-4 text-white">
+            <div class="text-center pt-3 pb-2">
+              <h2 class="my-4">Join Task: {{ task.title }}</h2>
+            </div>
+            <form method="POST">
+              {% csrf_token %}
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Join Task</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

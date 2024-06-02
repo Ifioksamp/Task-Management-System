@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Task Details {% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card mb-4">
+    <div class="card-body">
+      <h2>{{ task.title }}</h2>
+      <p>{{ task.description }}</p>
+      <p><strong>Priority:</strong> {{ task.priority }}</p>
+      <p><strong>Status:</strong> {{ task.status }}</p>
+
+      <hr>
+      <p><strong>Participants</strong>: 
+        {% for participant in task.participants.all %}
+          <a href="{% url 'user_profile' task.user.created_by.id %}">{{ participant.name }}</a> {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+
+      {% if request.user.profile in task.participants.all %}
+        <form action="{% url 'leave_task' task.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Leave Task</button>
+        </form>
+      {% elif request.user.profile != task.user and request.user.profile not in task.participants.all %}
+        <form action="{% url 'join_task' task.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Join Task</button>
+        </form>
+      {% endif %}
+    </div>
+
+    
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h3>Comments</h3>
+      <ul class="list-group list-group-flush">
+        {% for comment in comments %}
+          <li class="list-group-item">
+            <p><strong>{{ comment.user }}</strong> <span class="text-muted">{{ comment.created_at }}</span></p>
+            <p>{{ comment.content }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card-body">
+      <h3>Add a Comment</h3>
+      {% if is_participant %}
+      <div class="form-floating mb-3 mt-3 col-4">
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary mt-4 mb-3">Add Comment</button>
+        </form>
+      </div>
+      {% else %}
+        <p>You must join this task to add a comment.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
