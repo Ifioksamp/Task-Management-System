@@ -111,10 +111,4 @@ task-management-system/
  - Font Awesome - Icons
 
 
-### Steps to follow:
-1. **Replace the placeholder URL in the "Clone the Repository" section with the actual URL of your GitHub repository.**
-2. **Update any additional dependencies in the `requirements.txt` file.**
-3. **Adjust the project structure section if there are additional folders or significant changes.**
-4. **Ensure the instructions reflect the actual steps required to run your project.**
-
 With this `README.md`, users should have a clear understanding of how to set up and use your project.
